@@ -3,6 +3,52 @@
 Term project for EE475 (Digital Image Processing).
 
 This repository contains a Python pipeline for radiometric correction, denoising, feature extraction, and NDVI change analysis on multispectral GeoTIFFs.
+It was developed as a two-person course project and applied to Istanbul imagery from 2016 and 2024.
+
+## Results
+
+Study area: Istanbul, multispectral GeoTIFFs from 2016 and 2024 (bands B2/B3/B4/B8, roughly 4000 x 3000 px, no SWIR band available).
+
+![NDVI 2016, NDVI 2024 and the difference map](docs/results/overview_ndvi.jpg)
+
+| Metric | Value |
+|---|---|
+| Mean NDVI 2016 | 0.3757 |
+| Mean NDVI 2024 | 0.3779 |
+| Mean NDVI difference (2024 - 2016) | +0.0021 |
+| Vegetation ("green") loss from RGB k-means, 2016 to 2024 | 1.45 % of pixels |
+
+A near-zero change in the *mean* does not mean nothing changed: the loss map below (NDVI loss mask,
+threshold 0.7) shows many local patches of vegetation loss.
+
+![NDVI loss mask at threshold 0.7](docs/results/ndvi_loss_threshold_0.7.jpg)
+
+### Choice of NDVI threshold
+
+Thresholds from 0.3 to 0.9 were compared. Lower values pull in non-vegetated noise; higher values start to
+remove real vegetation, so 0.7 was used.
+
+![Loss mask for thresholds 0.3-0.9](docs/results/threshold_comparison.jpg)
+
+### RGB k-means as a cross-check
+
+| 2016 | 2024 |
+|---|---|
+| ![k-means 2016](docs/results/kmeans_rgb_2016.jpg) | ![k-means 2024](docs/results/kmeans_rgb_2024.jpg) |
+
+![Green loss map 2016 to 2024](docs/results/green_loss_2016_2024.jpg)
+
+### Pipeline decisions and caveats
+
+- **Final method:** raw, then dark-object subtraction, then homomorphic filtering, then adaptive denoising, then NDVI.
+  Homomorphic filtering was added because illumination differences between the two dates produced false change.
+- **Dropped from the proposal:** NDMI, because the imagery has no SWIR band.
+- **Caveats:** the k-means "green" cluster share (about 60 %) depends on the clustering run, and no ground-truth
+  validation is reported, so these numbers describe the pipeline's output, not validated land-cover change.
+  Cloud and water masking is future work.
+
+Full details are in [`TermProject_FinalReport.md`](TermProject_FinalReport.md) and [`PIPELINE_REPORT.md`](PIPELINE_REPORT.md).
+The source imagery is not included because of its size.
 
 ## Requirements
 - Windows 10/11
