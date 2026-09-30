@@ -1,0 +1,20 @@
+# Input imagery and generated outputs (GBs) - see README for data layout
+photos/
+outputs/
+
+# Copyrighted course textbook
+4th_Gonzalez_DigitalImageProcessing.pdf
+
+# Large binaries / duplicate archives
+*.pptx
+matlab.zip
+README.zip
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# OS
+desktop.ini
+Thumbs.db
